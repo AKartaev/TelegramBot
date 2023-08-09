@@ -9,7 +9,7 @@ import random
 from email.mime.text import MIMEText
 
 
-bot = telebot.TeleBot('6351199054:AAHWWbM0ZPgw1WFNapp7jUbeOXdwCpuHmNU')
+bot = telebot.TeleBot('******')
 
 email = None
 code = None
@@ -29,27 +29,16 @@ def welcome(message):
     start_valid(message)
 
 
-    # conn = sqlite3.connect('test_bd.sql')
-    # cur = conn.cursor()
-    #
-    # cur.execute('CREATE TABLE IF NOT EXISTS users (id int auto_increment primary key, name varchar(50), tg_login varchar(50), email varchar(200))')
-    # conn.commit()
-    # cur.close()
-    # conn.close()
-
-    #bot.register_next_step_handler(message, user_mail_reg)
-
-
 def send_email(message):
     global email
     global code
-    sender = "mealfit.sport@gmail.com"
+    sender = "***"
     email = message.text.strip()
     code = int(random.random()*10000)
     letter = f'For registration in Mealfit use this cide: {code}'
     # \\your password = "your password"
     #password = os.getenv("EMAIL_PASSWORD")
-    password = 'qexjkkemfrjjowpd'
+    password = '***'
 
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.starttls()
@@ -59,7 +48,6 @@ def send_email(message):
     msg["Subject"] = "Your code for Mealfit"
     server.sendmail(sender, email, msg.as_string())
 
-    # server.sendmail(sender, recipient, msg.as_string(), f"Subject: Your code for Mealfit\n{letter}")
 
     bot.reply_to(message, 'На указанный адрес был выслан код. Введите его для подтверждения регистрации (проверьте папку "Спам")')
     bot.register_next_step_handler(message, email_check)
@@ -114,48 +102,12 @@ def start_valid(message):
 
 
 
-
-
-
-## Теперь сделаем функциональные кнопки под строкой текста
-# @bot.message_handler(commands = ['start'])
-# def start(message):
-#     mp = types.ReplyKeyboardMarkup()
-#     btn1 = types.KeyboardButton('О программе')
-#     mp.row(btn1)
-#     btn2 = types.KeyboardButton('Бесплатная консультация')
-#     btn3 = types.KeyboardButton('')
-#     mp.row(btn2, btn3)
-#     bot.send_message(message.chat.id, 'Привет!', reply_markup=mp)
-
-# markup3 = types.ReplyKeyboardMarkup()
-# btn1 = types.KeyboardButton('Записаться на бесплатную консультацию')
-# btn2 = types.KeyboardButton('Перейти на сайт')
-# btn3 = types.KeyboardButton('Подобрать прогрумму самостоятельно')
-#bot.send_message(message.chat.id, 'Привет!', reply_markup=markup3)
-#bot.register_next_step_handler(message, on_click)
-
-def on_click(message):
-    if message.text.lower() == 'Перейти на сайт':
-        bot.send_message(message.chat.id, 'Website is open')
-    if message.text.lower() == 'Удалить фото':
-        bot.send_message(message.chat.id, 'Deleted')
-
-@bot.message_handler(commands = ['help'])
-def welcome(message):
-    bot.send_message(message.chat.id, '<b>Ниже мои функции</b>', parse_mode='html', reply_markup=markup) ##Возвращает функциональные кнопки ответом на команду help
-
-@bot.message_handler(commands = ['site'])
-def opensite(message):
-    webbrowser.open('https://www.fatsecret.com/')
-
-
 @bot.message_handler(content_types = ['document'])
 def gry_doc(message):
     global file_path
     file_info = bot.get_file(message.document.file_id)
     downloaded_file = bot.download_file(file_info.file_path)
-    file_path = os.path.join('C:/Users/Andrew/PycharmProjects/pythonProject/venv/callback_files', f'{message.from_user.first_name}_{message.from_user.last_name}_{message.document.file_name}')
+    file_path = os.path.join('****', f'{message.from_user.first_name}_{message.from_user.last_name}_{message.document.file_name}')
 
     with open(file_path, 'wb') as new_file:
         new_file.write(downloaded_file)
@@ -175,7 +127,7 @@ def gry_photo(message):
 
     downloaded_photo = bot.download_file(file_info.file_path)
 
-    file_path = os.path.join('C:/Users/Andrew/PycharmProjects/pythonProject/venv/callback_files', f'{message.from_user.first_name}_{message.from_user.last_name}_{original_filename}{file_extension}')
+    file_path = os.path.join('***', f'{message.from_user.first_name}_{message.from_user.last_name}_{original_filename}{file_extension}')
 
     with open(file_path, 'wb') as new_file:
         new_file.write(downloaded_photo)
@@ -185,21 +137,19 @@ def gry_photo(message):
 
 markup_reg = types.InlineKeyboardMarkup()
 markup_reg.add(types.InlineKeyboardButton('Зарегестрироваться', callback_data = 'regestration'))
-markup_reg.add(types.InlineKeyboardButton('О программе', url = 'https://mealfit.nicepage.io/'))
+markup_reg.add(types.InlineKeyboardButton('О программе', url = '****'))
 
 
 markup = types.InlineKeyboardMarkup()
-markup.add(types.InlineKeyboardButton('Перейти на сайт', url = 'https://mealfit.nicepage.io/'))
-markup.add(types.InlineKeyboardButton('Записаться на бесплатную консультацию', url = 'https://www.fatsecret.com/'))
-markup.add(types.InlineKeyboardButton('Подобрать прогрумму самостоятельно', url = 'https://www.fatsecret.com/'))
+markup.add(types.InlineKeyboardButton('Перейти на сайт', url = '***'))
+markup.add(types.InlineKeyboardButton('Записаться на бесплатную консультацию', url = '***'))
+markup.add(types.InlineKeyboardButton('Подобрать прогрумму самостоятельно', url = '***'))
 
 markup2 = types.InlineKeyboardMarkup()
 markup2.add(types.InlineKeyboardButton('Удалить', callback_data = 'delete'))
 markup2.add(types.InlineKeyboardButton('Заменить', callback_data = 'edit'))
 
-#bot.reply_to(message,'Классный результат, так держать!', reply_markup = markup) ## Возвращается в ответ пользовател. конкретную кнопку
 
-## Так хапускаются дейтсвия над предыдущими сообщениями
 @bot.callback_query_handler(func=lambda callback: True)
 def callback_message(callback):
     global file_path
@@ -218,33 +168,6 @@ def callback_message(callback):
         bot.send_message(callback.message.chat.id, 'Введите полный aдрес электронной почты. Пример: <b>new_user@gmail.com</b>',parse_mode='html')
         bot.register_next_step_handler(callback.message, send_email)
 
-
-# @bot.callback_query_handler(func=lambda call: True)
-# def callback(call):
-#     conn = sqlite3.connect('test_bd.sql')
-#     cur = conn.cursor()
-#
-#     cur.execute('SELECT * FROM users')
-#     users = cur.fetchall()
-#
-#     p = ''
-#     for i in users:
-#         p = f'Имя:{i[1]}, Логин:{i[2]}, Почта:{i[3]}'
-#         # if i['username'] == call.message.from_user.username:
-#         #     p = f"Имя:{i['name']}, Логин:{i['tg_login']}, Почта:{i['email']}"
-#
-#     cur.close()
-#     conn.close()
-#
-#     bot.send_message(call.message.chat.id, p)
-
-# Response if user write anything apart from the main commands
-# @bot.message_handler()
-# def info(message):
-#     if message.text.lower() == '+':
-#         bot.reply_to(message, f'{message.from_user.first_name}, переходи по ссылке, там подробная информация по курсу <b>https://www.fatsecret.com/</b>', parse_mode = 'html')
-#     if message.text.lower() == '-':
-#         bot.send_message(message.chat.id, f'{message.from_user.first_name}, очень жаль, но ничего, у тебя будет шанс поучаствовать в следующий раз \U0001F609')
 
 @bot.message_handler()
 def any_message(message):
