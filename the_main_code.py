@@ -8,13 +8,15 @@ import os
 import random
 from email.mime.text import MIMEText
 
-
+#Here you can fill the gap by your telegram token
 bot = telebot.TeleBot('******')
 
+#There are a few global variables which are using in the algoritm below
 email = None
 code = None
 file_path = None
 
+#Create a table in case if it doen't exist
 conn = sqlite3.connect('test_bd.sql')
 cur = conn.cursor()
 
@@ -24,9 +26,33 @@ conn.commit()
 cur.close()
 conn.close()
 
+#After pressing 'start' algoritm run next function in order to identify is current user is new or it's already exist in the DB 
 @bot.message_handler(commands = ['start'])
 def welcome(message):
     start_valid(message)
+
+#Here is exactly we determine type of users (new/old). If user is new, algoritm calls another function in order to registrate new user. If not, algoritm sends a welcome message
+def start_valid(message):
+    conn = sqlite3.connect('test_bd.sql')
+    cur = conn.cursor()
+
+    cur.execute('SELECT * FROM users')
+    users = cur.fetchall()
+
+    p = 'необходимо зарегестрироваться'
+    file = open('venv/HEALTHY_EATING_ch1.jpg', 'rb')
+    for i in users:
+            if i[2] == message.from_user.username:
+                p = f'Имя:{i[1]}, Логин:{i[2]}, Почта:{i[3]}'
+                break
+                #bot.send_message(message.chat.id, f'Привет, {message.from_user.first_name}{message.from_user.last_name}. Рад тебя приветствовать в нашем сообществе вставших на путь исправления!', reply_markup=markup)
+    if p == 'необходимо зарегестрироваться':
+        bot.send_photo(message.chat.id, file,caption=f'Привет, {message.from_user.first_name} {message.from_user.last_name}. Рад тебя приветствовать в нашем сообществе вставших на путь исправления!',reply_markup=markup_reg)
+    else:
+        bot.send_message(message.chat.id, f'С возвращением, {message.from_user.first_name}! Сохраняй мотивацию и не сдавайся!', reply_markup=markup)
+
+    cur.close()
+    conn.close()
 
 
 def send_email(message):
@@ -75,30 +101,6 @@ def user_name_reg(message):
     conn.close()
 
     bot.send_message(message.chat.id,f'Поздравляю {message.from_user.first_name}, Вы зарегестрированы! Ожидайте дальнейших инструкций, а пока можете ознакомится с продуктом', reply_markup=markup)
-
-
-
-def start_valid(message):
-    conn = sqlite3.connect('test_bd.sql')
-    cur = conn.cursor()
-
-    cur.execute('SELECT * FROM users')
-    users = cur.fetchall()
-
-    p = 'необходимо зарегестрироваться'
-    file = open('venv/HEALTHY_EATING_ch1.jpg', 'rb')
-    for i in users:
-            if i[2] == message.from_user.username:
-                p = f'Имя:{i[1]}, Логин:{i[2]}, Почта:{i[3]}'
-                break
-                #bot.send_message(message.chat.id, f'Привет, {message.from_user.first_name}{message.from_user.last_name}. Рад тебя приветствовать в нашем сообществе вставших на путь исправления!', reply_markup=markup)
-    if p == 'необходимо зарегестрироваться':
-        bot.send_photo(message.chat.id, file,caption=f'Привет, {message.from_user.first_name} {message.from_user.last_name}. Рад тебя приветствовать в нашем сообществе вставших на путь исправления!',reply_markup=markup_reg)
-    else:
-        bot.send_message(message.chat.id, f'С возвращением, {message.from_user.first_name}! Сохраняй мотивацию и не сдавайся!', reply_markup=markup)
-
-    cur.close()
-    conn.close()
 
 
 
